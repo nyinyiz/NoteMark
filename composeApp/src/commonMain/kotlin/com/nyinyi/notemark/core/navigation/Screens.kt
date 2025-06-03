@@ -8,4 +8,7 @@ sealed interface Screens {
 
     @Serializable
     data object LandingScreen : Screens
+
+    @Serializable
+    data object RegisterScreen : Screens
 }

@@ -6,6 +6,8 @@ import com.nyinyi.notemark.features.auth.domain.repository.AuthRepository
 import com.nyinyi.notemark.features.auth.domain.repository.AuthRepositoryImpl
 import com.nyinyi.notemark.features.auth.domain.usecase.LoginUseCase
 import com.nyinyi.notemark.features.auth.domain.usecase.RegisterUseCase
+import com.nyinyi.notemark.features.auth.presentation.register.RegisterViewModel
+import com.nyinyi.notemark.features.auth.presentation.register.createViewModelScope
 import io.ktor.client.HttpClient
 import io.ktor.client.plugins.HttpTimeout
 import io.ktor.client.plugins.contentnegotiation.ContentNegotiation
@@ -16,7 +18,9 @@ import io.ktor.client.plugins.logging.Logging
 import io.ktor.http.ContentType
 import io.ktor.http.contentType
 import io.ktor.serialization.kotlinx.json.json
+import kotlinx.coroutines.CoroutineScope
 import kotlinx.serialization.json.Json
+import org.koin.core.module.dsl.viewModel
 import org.koin.core.qualifier.named
 import org.koin.dsl.module
 
@@ -27,6 +31,7 @@ val appModule =
     module {
 
         single(named(NAMED_USER_EMAIL)) { MOBILE_DEV_CAMPUS_EMAIL }
+        factory<CoroutineScope>(named("ViewModelScope")) { createViewModelScope() }
 
         single {
             HttpClient {
@@ -72,5 +77,12 @@ val appModule =
         }
 
         factory { RegisterUseCase(authRepository = get()) }
-        factory { LoginUseCase(authRepository = get()) } // Assuming you create LoginUseCase
+        factory { LoginUseCase(authRepository = get()) }
+
+        viewModel {
+            RegisterViewModel(
+                registerUseCase = get(),
+                coroutineScopeProvider = get(named("ViewModelScope")),
+            )
+        }
     }
