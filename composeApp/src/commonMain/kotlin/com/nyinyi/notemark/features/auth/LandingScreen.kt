@@ -13,6 +13,7 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.widthIn
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
@@ -29,8 +30,9 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
-import androidx.window.core.layout.WindowHeightSizeClass
 import androidx.window.core.layout.WindowSizeClass
+import com.nyinyi.notemark.core.utils.ScreenConfiguration
+import com.nyinyi.notemark.core.utils.determineScreenConfiguration
 import notemark.composeapp.generated.resources.Res
 import notemark.composeapp.generated.resources.landing_bg
 import org.jetbrains.compose.resources.painterResource
@@ -44,56 +46,121 @@ fun LandingScreenPreview() {
 
 @Composable
 fun LandingScreen(windowSizeClass: WindowSizeClass = currentWindowAdaptiveInfo().windowSizeClass) {
-    val showLandscapeScreen =
-        windowSizeClass.windowHeightSizeClass == WindowHeightSizeClass.COMPACT
+    val configuration = determineScreenConfiguration(windowSizeClass)
 
     MPLog
         .tag("LandingScreen")
-        .v("showLandscapeScreen: $showLandscapeScreen : ${windowSizeClass.windowHeightSizeClass} : ${windowSizeClass.windowWidthSizeClass}")
-    if (showLandscapeScreen) {
-        Row(
+        .v("Configuration: $configuration (H: ${windowSizeClass.windowHeightSizeClass}, W: ${windowSizeClass.windowWidthSizeClass})")
+
+    when (configuration) {
+        is ScreenConfiguration.MobilePortrait -> LandingScreenMobilePortrait()
+        is ScreenConfiguration.MobileLandscape -> LandingScreenMobileLandscape()
+        is ScreenConfiguration.TabletPortrait -> LandingScreenTabletPortrait()
+        is ScreenConfiguration.TabletLandscape -> LandingScreenTabletLandscape()
+        is ScreenConfiguration.Undefined -> {
+            MPLog.tag("LandingScreen").w("Undefined configuration, defaulting to MobilePortrait.")
+            LandingScreenMobilePortrait()
+        }
+    }
+}
+
+@Composable
+private fun LandingScreenMobilePortrait() {
+    Box(
+        modifier =
+            Modifier
+                .fillMaxSize()
+                .background(Color(0xFFE0EAFF)),
+    ) {
+        BackgroundSection(
             modifier =
                 Modifier
-                    .fillMaxSize()
-                    .background(Color(0xFFE0EAFF)),
-        ) {
-            BackgroundSection(
-                modifier =
-                    Modifier
-                        .fillMaxHeight()
-                        .weight(0.50f),
-            )
-            BottomCard(
-                modifier =
-                    Modifier
-                        .fillMaxHeight()
-                        .weight(0.50f)
-                        .padding(vertical = 24.dp, horizontal = 24.dp),
-                isLandscape = true,
-            )
-        }
-    } else {
-        Box(
+                    .fillMaxWidth()
+                    .fillMaxHeight(0.65f),
+        )
+        BottomCard(
             modifier =
                 Modifier
-                    .fillMaxSize()
-                    .background(Color(0xFFE0EAFF)),
-        ) {
-            BackgroundSection(
-                modifier =
-                    Modifier
-                        .fillMaxWidth()
-                        .fillMaxHeight(0.65f)
-                        .background(Color(0xFFE0EFFF)),
-            )
-            BottomCard(
-                modifier =
-                    Modifier
-                        .fillMaxWidth()
-                        .fillMaxHeight(0.40f)
-                        .align(Alignment.BottomCenter),
-            )
-        }
+                    .fillMaxWidth()
+                    .fillMaxHeight(0.40f)
+                    .align(Alignment.BottomCenter),
+            isLandscape = false,
+        )
+    }
+}
+
+@Composable
+private fun LandingScreenMobileLandscape() {
+    Row(
+        modifier =
+            Modifier
+                .fillMaxSize()
+                .background(Color(0xFFE0EAFF)),
+    ) {
+        BackgroundSection(
+            modifier =
+                Modifier
+                    .fillMaxHeight()
+                    .weight(0.40f),
+        )
+        BottomCard(
+            modifier =
+                Modifier
+                    .fillMaxHeight()
+                    .weight(0.60f)
+                    .padding(vertical = 24.dp, horizontal = 24.dp),
+            isLandscape = true,
+        )
+    }
+}
+
+@Composable
+private fun LandingScreenTabletPortrait() {
+    Box(
+        modifier =
+            Modifier
+                .fillMaxSize()
+                .background(Color(0xFFE0EAFF)),
+    ) {
+        BackgroundSection(
+            modifier =
+                Modifier
+                    .fillMaxWidth()
+                    .fillMaxHeight(0.75f),
+        )
+        BottomCard(
+            modifier =
+                Modifier
+                    .widthIn(max = 680.dp)
+                    .fillMaxHeight(0.30f)
+                    .align(Alignment.BottomCenter),
+            isLandscape = false,
+        )
+    }
+}
+
+@Composable
+private fun LandingScreenTabletLandscape() {
+    Row(
+        modifier =
+            Modifier
+                .fillMaxSize()
+                .background(Color(0xFFE0EAFF)),
+    ) {
+        BackgroundSection(
+            modifier =
+                Modifier
+                    .fillMaxHeight()
+                    .weight(0.40f),
+        )
+        BottomCard(
+            modifier =
+                Modifier
+                    .fillMaxHeight()
+                    .weight(0.60f)
+                    .padding(vertical = 24.dp, horizontal = 24.dp),
+            isLandscape = true,
+        )
     }
 }
 
