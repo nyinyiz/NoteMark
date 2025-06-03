@@ -2,6 +2,10 @@ package com.nyinyi.notemark.di
 
 import com.nyinyi.notemark.core.network.api.NoteMarkApiService
 import com.nyinyi.notemark.core.network.api.NoteMarkApiServiceImpl
+import com.nyinyi.notemark.features.auth.domain.repository.AuthRepository
+import com.nyinyi.notemark.features.auth.domain.repository.AuthRepositoryImpl
+import com.nyinyi.notemark.features.auth.domain.usecase.LoginUseCase
+import com.nyinyi.notemark.features.auth.domain.usecase.RegisterUseCase
 import io.ktor.client.HttpClient
 import io.ktor.client.plugins.HttpTimeout
 import io.ktor.client.plugins.contentnegotiation.ContentNegotiation
@@ -18,7 +22,6 @@ import org.koin.dsl.module
 
 const val MOBILE_DEV_CAMPUS_EMAIL = "nyinyizaw.dev@gmail.com"
 const val NAMED_USER_EMAIL = "UserEmail"
-const val NAMED_DEBUG_MODE = "DebugMode"
 
 val appModule =
     module {
@@ -61,4 +64,13 @@ val appModule =
                 mobileDevCampusEmail = get(named(NAMED_USER_EMAIL)),
             )
         }
+
+        single<AuthRepository> {
+            AuthRepositoryImpl(
+                apiService = get(),
+            )
+        }
+
+        factory { RegisterUseCase(authRepository = get()) }
+        factory { LoginUseCase(authRepository = get()) } // Assuming you create LoginUseCase
     }
