@@ -10,6 +10,7 @@ plugins {
     alias(libs.plugins.composeMultiplatform)
     alias(libs.plugins.composeCompiler)
     alias(libs.plugins.composeHotReload)
+    alias(libs.plugins.jetbrains.kotlin.serialization)
 }
 
 kotlin {
@@ -19,7 +20,7 @@ kotlin {
             jvmTarget.set(JvmTarget.JVM_11)
         }
     }
-    
+
     listOf(
         iosX64(),
         iosArm64(),
@@ -30,10 +31,10 @@ kotlin {
             isStatic = true
         }
     }
-    
+
     jvm("desktop")
-    
-    @OptIn(ExperimentalWasmDsl::class)
+
+/*    @OptIn(ExperimentalWasmDsl::class)
     wasmJs {
         moduleName = "composeApp"
         browser {
@@ -51,11 +52,11 @@ kotlin {
             }
         }
         binaries.executable()
-    }
-    
+    }*/
+
     sourceSets {
         val desktopMain by getting
-        
+
         androidMain.dependencies {
             implementation(compose.preview)
             implementation(libs.androidx.activity.compose)
@@ -69,6 +70,29 @@ kotlin {
             implementation(compose.components.uiToolingPreview)
             implementation(libs.androidx.lifecycle.viewmodel)
             implementation(libs.androidx.lifecycle.runtimeCompose)
+
+            // Navigation
+            implementation(libs.jetbrains.compose.navigation)
+            implementation(libs.kotlinx.serialization.json)
+
+            // Image loading
+            implementation(libs.coil.compose)
+
+            // Icons
+            implementation(libs.material.icons.extended)
+
+            // Koin DI
+            implementation(libs.koin.compose.viewmodel)
+            implementation(project.dependencies.platform(libs.koin.bom))
+            implementation(libs.koin.core)
+
+            // Datastore
+            api(libs.androidx.datastore)
+            api(libs.androidx.datastore.preferences)
+
+
+            // Ktor
+            implementation(libs.bundles.ktor)
         }
         commonTest.dependencies {
             implementation(libs.kotlin.test)
