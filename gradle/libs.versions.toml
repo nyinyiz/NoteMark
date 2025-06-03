@@ -1,5 +1,6 @@
 [versions]
 adaptive = "1.2.0-alpha06"
+adaptiveVersion = "1.1.1"
 agp = "8.7.3"
 android-compileSdk = "35"
 android-minSdk = "24"
@@ -28,6 +29,7 @@ koin-bom = "4.0.0"
 ktor = "3.0.0"
 
 [libraries]
+adaptive = { module = "org.jetbrains.compose.material3.adaptive:adaptive", version.ref = "adaptiveVersion" }
 androidx-adaptive = { module = "androidx.compose.material3.adaptive:adaptive", version.ref = "adaptive" }
 
 androidx-datastore = { module = "androidx.datastore:datastore", version.ref = "datastorePreferences" }

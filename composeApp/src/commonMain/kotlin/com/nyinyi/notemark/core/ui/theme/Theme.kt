@@ -14,33 +14,35 @@ private val error = Color(0xFFE1234B)
 private val primary = Color(0xFF5977F7)
 private val onPrimary = Color(0xFFFFFFFF)
 
-private val LightColorScheme = lightColorScheme(
-    primary = primary,
-    onPrimary = onPrimary,
-    onSurface = onSurface,
-    onSurfaceVariant = onSurfaceVariant,
-    surface = surface,
-    error = error
-)
+private val LightColorScheme =
+    lightColorScheme(
+        primary = primary,
+        onPrimary = onPrimary,
+        onSurface = onSurface,
+        onSurfaceVariant = onSurfaceVariant,
+        surface = surface,
+        error = error,
+    )
 
-private val DarkColorScheme = darkColorScheme(
-    primary = primary,
-    onPrimary = onPrimary,
-    onSurface = surfaceLowest,
-    onSurfaceVariant = surface,
-    surface = onSurfaceVariant,
-    error = error
-)
+private val DarkColorScheme =
+    darkColorScheme(
+        primary = primary,
+        onPrimary = onPrimary,
+        onSurface = surfaceLowest,
+        onSurfaceVariant = surface,
+        surface = onSurfaceVariant,
+        error = error,
+    )
 
 @Composable
 fun NoteMarkTheme(
     darkTheme: Boolean = false,
-    content: @Composable () -> Unit
+    content: @Composable () -> Unit,
 ) {
     val colorScheme = if (darkTheme) DarkColorScheme else LightColorScheme
 
     MaterialTheme(
         colorScheme = colorScheme,
-        content = content
+        content = content,
     )
 }
