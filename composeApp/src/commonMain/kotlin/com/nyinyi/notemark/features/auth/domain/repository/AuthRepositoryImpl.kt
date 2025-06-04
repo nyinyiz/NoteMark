@@ -1,5 +1,6 @@
 package com.nyinyi.notemark.features.auth.domain.repository
 
+import MPLog
 import com.nyinyi.notemark.core.network.api.NoteMarkApiService
 import com.nyinyi.notemark.core.network.model.LoginRequest
 import com.nyinyi.notemark.core.network.model.RegisterRequest
@@ -9,6 +10,7 @@ import com.nyinyi.notemark.features.auth.domain.model.UserLoginData
 import com.nyinyi.notemark.features.auth.domain.model.UserRegistrationData
 import io.ktor.client.plugins.ClientRequestException
 import io.ktor.client.plugins.ServerResponseException
+import io.ktor.client.statement.bodyAsText
 import io.ktor.http.HttpStatusCode
 import kotlinx.serialization.SerializationException
 
@@ -17,14 +19,35 @@ class AuthRepositoryImpl(
 ) : AuthRepository {
     override suspend fun register(registrationData: UserRegistrationData): Resource<Unit, AuthDomainError> =
         try {
-            apiService.registerUser(
-                RegisterRequest(
-                    username = registrationData.username,
-                    email = registrationData.email,
-                    password = registrationData.password,
-                ),
-            )
-            Resource.Success(Unit)
+            val response =
+                apiService.registerUser(
+                    RegisterRequest(
+                        username = registrationData.username,
+                        email = registrationData.email,
+                        password = registrationData.password,
+                    ),
+                )
+
+            when (response.status) {
+                HttpStatusCode.OK, HttpStatusCode.Created -> {
+                    Resource.Success(Unit)
+                }
+
+                else -> {
+                    MPLog
+                        .tag("AuthRepositoryImpl")
+                        .w("Registration returned unexpected status: ${response.status.value}")
+                    Resource.Error(
+                        mapHttpClientErrorToDomainError(
+                            ClientRequestException(
+                                response = response,
+                                cachedResponseText = response.bodyAsText(),
+                            ),
+                            response.status,
+                        ),
+                    )
+                }
+            }
         } catch (e: ClientRequestException) {
             Resource.Error(mapHttpClientErrorToDomainError(e, e.response.status))
         } catch (e: ServerResponseException) {
@@ -32,6 +55,7 @@ class AuthRepositoryImpl(
         } catch (e: SerializationException) {
             Resource.Error(AuthDomainError.UnknownError("Data parsing error: ${e.message}"))
         } catch (e: Exception) {
+            MPLog.tag("AuthRepositoryImpl").e(e.message ?: "Unknown error occurred. ${e.cause}")
             Resource.Error(AuthDomainError.NetworkError)
         }
 

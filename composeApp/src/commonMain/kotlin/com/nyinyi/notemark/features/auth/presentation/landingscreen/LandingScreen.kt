@@ -143,7 +143,7 @@ private fun LandingScreenMobileLandscape(
                 Modifier
                     .fillMaxHeight()
                     .weight(0.60f)
-                    .padding(vertical = 24.dp, horizontal = 24.dp),
+                    .padding(vertical = 24.dp),
             isLandscape = true,
             onSignUpClick = onSignUpClick,
             onLoginClick = onLoginClick,

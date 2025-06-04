@@ -10,11 +10,12 @@ import io.ktor.client.call.body
 import io.ktor.client.request.header
 import io.ktor.client.request.post
 import io.ktor.client.request.setBody
+import io.ktor.client.statement.HttpResponse
 import io.ktor.http.ContentType
 import io.ktor.http.contentType
 
 interface NoteMarkApiService {
-    suspend fun registerUser(registerRequest: RegisterRequest)
+    suspend fun registerUser(registerRequest: RegisterRequest): HttpResponse
 
     suspend fun login(loginRequest: LoginRequest): LoginResponse
 
@@ -25,13 +26,13 @@ class NoteMarkApiServiceImpl(
     private val httpClient: HttpClient,
     private val mobileDevCampusEmail: String,
 ) : NoteMarkApiService {
-    override suspend fun registerUser(registerRequest: RegisterRequest) {
-        httpClient.post("${NetworkConstants.BASE_URL}${NetworkConstants.REGISTER_ENDPOINT}") {
-            contentType(ContentType.Application.Json)
-            header(NetworkConstants.HEADER_X_USER_EMAIL, mobileDevCampusEmail)
-            setBody(registerRequest)
-        }
-    }
+    override suspend fun registerUser(registerRequest: RegisterRequest): HttpResponse =
+        httpClient
+            .post("${NetworkConstants.BASE_URL}${NetworkConstants.REGISTER_ENDPOINT}") {
+                contentType(ContentType.Application.Json)
+                header(NetworkConstants.HEADER_X_USER_EMAIL, mobileDevCampusEmail)
+                setBody(registerRequest)
+            }.body()
 
     override suspend fun login(loginRequest: LoginRequest): LoginResponse =
         httpClient
