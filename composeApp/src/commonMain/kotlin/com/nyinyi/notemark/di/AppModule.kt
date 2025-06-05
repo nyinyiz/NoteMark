@@ -6,6 +6,7 @@ import com.nyinyi.notemark.features.auth.domain.repository.AuthRepository
 import com.nyinyi.notemark.features.auth.domain.repository.AuthRepositoryImpl
 import com.nyinyi.notemark.features.auth.domain.usecase.LoginUseCase
 import com.nyinyi.notemark.features.auth.domain.usecase.RegisterUseCase
+import com.nyinyi.notemark.features.auth.presentation.login.LoginViewModel
 import com.nyinyi.notemark.features.auth.presentation.register.RegisterViewModel
 import com.nyinyi.notemark.features.auth.presentation.register.createViewModelScope
 import io.ktor.client.HttpClient
@@ -82,6 +83,13 @@ val appModule =
         viewModel {
             RegisterViewModel(
                 registerUseCase = get(),
+                coroutineScopeProvider = get(named("ViewModelScope")),
+            )
+        }
+
+        viewModel {
+            LoginViewModel(
+                loginUseCase = get(),
                 coroutineScopeProvider = get(named("ViewModelScope")),
             )
         }

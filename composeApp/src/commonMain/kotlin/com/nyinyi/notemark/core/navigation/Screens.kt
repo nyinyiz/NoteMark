@@ -11,4 +11,7 @@ sealed interface Screens {
 
     @Serializable
     data object RegisterScreen : Screens
+
+    @Serializable
+    data object LoginScreen : Screens
 }

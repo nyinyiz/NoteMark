@@ -6,6 +6,7 @@ import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.navOptions
 import com.nyinyi.notemark.features.auth.presentation.landingscreen.LandingScreen
+import com.nyinyi.notemark.features.auth.presentation.login.LoginScreen
 import com.nyinyi.notemark.features.auth.presentation.register.RegisterScreen
 import com.nyinyi.notemark.features.splash.SplashScreen
 
@@ -34,6 +35,7 @@ fun NavGraph(navController: NavHostController) {
                     navController.navigate(Screens.RegisterScreen)
                 },
                 onLoginClick = {
+                    navController.navigate(Screens.LoginScreen)
                 },
             )
         }
@@ -48,7 +50,17 @@ fun NavGraph(navController: NavHostController) {
                     }
                 },
                 onRegistrationSuccess = {
-                    navController.navigate(Screens.LandingScreen)
+                    navController.navigate(Screens.LoginScreen)
+                },
+            )
+        }
+
+        composable<Screens.LoginScreen> {
+            LoginScreen(
+                onLoginSuccess = {
+                },
+                onNavigateToRegister = {
+                    navController.navigate(Screens.RegisterScreen)
                 },
             )
         }

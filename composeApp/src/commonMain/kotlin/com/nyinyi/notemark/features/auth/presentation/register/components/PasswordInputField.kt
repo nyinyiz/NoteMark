@@ -12,6 +12,8 @@ import androidx.compose.ui.focus.FocusDirection
 import androidx.compose.ui.focus.FocusManager
 import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.text.input.KeyboardType
+import androidx.compose.ui.text.input.PasswordVisualTransformation
+import androidx.compose.ui.text.input.VisualTransformation
 import com.nyinyi.notemark.core.ui.components.LabeledOutlinedTextField
 
 @Composable
@@ -44,6 +46,7 @@ fun PasswordInputField(
                 onDone = { onDoneAction?.invoke() },
             ),
         showLabelAboveField = true,
+        visualTransformation = if (isVisible) VisualTransformation.None else PasswordVisualTransformation(),
         trailingIcon = {
             IconButton(onClick = onVisibilityToggle) {
                 Icon(

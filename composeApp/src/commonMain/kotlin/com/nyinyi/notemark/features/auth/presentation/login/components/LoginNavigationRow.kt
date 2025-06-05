@@ -1,4 +1,4 @@
-package com.nyinyi.notemark.features.auth.presentation.register.components
+package com.nyinyi.notemark.features.auth.presentation.login.components
 
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Row
@@ -11,13 +11,13 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 
 @Composable
-fun LoginNavigationLink(onNavigateToLogin: () -> Unit) {
+fun LoginNavigationRow(onNavigateToRegister: () -> Unit) {
     Row(
         modifier = Modifier.fillMaxWidth(),
         horizontalArrangement = Arrangement.Center,
     ) {
         TextButton(
-            onClick = onNavigateToLogin,
+            onClick = onNavigateToRegister,
             colors =
                 ButtonDefaults.textButtonColors(
                     contentColor = MaterialTheme.colorScheme.onSurface,
@@ -25,7 +25,7 @@ fun LoginNavigationLink(onNavigateToLogin: () -> Unit) {
                 ),
         ) {
             Text(
-                "Already have an account? ",
+                text = "Don't have an account?",
                 style = MaterialTheme.typography.bodyMedium,
                 color = MaterialTheme.colorScheme.primary,
             )
