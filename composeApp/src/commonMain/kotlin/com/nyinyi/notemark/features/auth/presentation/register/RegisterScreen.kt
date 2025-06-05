@@ -17,6 +17,7 @@ import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Visibility
 import androidx.compose.material.icons.filled.VisibilityOff
+import androidx.compose.material3.AlertDialog
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.Card
@@ -32,6 +33,7 @@ import androidx.compose.material3.SnackbarDuration
 import androidx.compose.material3.SnackbarHost
 import androidx.compose.material3.SnackbarHostState
 import androidx.compose.material3.Text
+import androidx.compose.material3.TextButton
 import androidx.compose.material3.TextField
 import androidx.compose.material3.adaptive.currentWindowAdaptiveInfo
 import androidx.compose.runtime.Composable
@@ -50,6 +52,7 @@ import androidx.compose.ui.text.input.PasswordVisualTransformation
 import androidx.compose.ui.text.input.VisualTransformation
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.compose.ui.window.DialogProperties
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.window.core.layout.WindowSizeClass
 import com.nyinyi.notemark.features.auth.domain.repository.AuthDomainError
@@ -68,18 +71,37 @@ fun RegisterScreen(
     val focusManager = LocalFocusManager.current
     val snackbarHostState = remember { SnackbarHostState() }
 
-    LaunchedEffect(key1 = state.registrationSuccess) {
-        if (state.registrationSuccess) {
-            onRegistrationSuccess()
-            viewModel.consumeRegistrationSuccess()
-        }
+    if (state.registrationSuccess) {
+        AlertDialog(
+            onDismissRequest = {
+                viewModel.consumeRegistrationSuccess()
+                onRegistrationSuccess()
+            },
+            title = {
+                Text(text = "Registration Successful!")
+            },
+            text = {
+                Text(text = "Your account has been created successfully. You can now log in.")
+            },
+            confirmButton = {
+                TextButton(
+                    onClick = {
+                        viewModel.consumeRegistrationSuccess()
+                        onRegistrationSuccess()
+                    },
+                ) {
+                    Text("OK")
+                }
+            },
+            properties = DialogProperties(dismissOnBackPress = true, dismissOnClickOutside = true),
+        )
     }
 
     LaunchedEffect(key1 = state.registrationError) {
         state.registrationError?.let { error ->
             val errorMessage =
                 when (error) {
-                    AuthDomainError.EmailAlreadyExistsError -> "This email is already registered."
+                    AuthDomainError.EmailAlreadyExistsError -> "A user with that email or username already exists."
                     AuthDomainError.InvalidCredentialsError -> "Invalid credentials. Please check your input."
                     AuthDomainError.NetworkError -> "Network error. Please check connection and try again."
                     AuthDomainError.BadRequestError -> "Invalid data. Please check all fields."
