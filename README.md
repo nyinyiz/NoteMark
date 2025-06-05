@@ -1,21 +1,38 @@
-This is a Kotlin Multiplatform project targeting Android, iOS, Web, Desktop.
+# NoteMark
 
-* `/composeApp` is for code that will be shared across your Compose Multiplatform applications.
-  It contains several subfolders:
-  - `commonMain` is for code that’s common for all targets.
-  - Other folders are for Kotlin code that will be compiled for only the platform indicated in the folder name.
-    For example, if you want to use Apple’s CoreCrypto for the iOS part of your Kotlin app,
-    `iosMain` would be the right folder for such calls.
+## Milestone #1 Goal
 
-* `/iosApp` contains iOS applications. Even if you’re sharing your UI with Compose Multiplatform, 
-  you need this entry point for your iOS app. This is also where you should add SwiftUI code for your project.
+**Get users in the door and greet them with style and substance.**
 
+- Your mission: create the opening experience of NoteMark. From a minimalist splash screen to a
+  welcoming landing page, this milestone gets users through the front door. It includes functional
+  login and registration flows with full validation, error handling and session creation — this is
+  where the journey begins!
 
-Learn more about [Kotlin Multiplatform](https://www.jetbrains.com/help/kotlin-multiplatform-dev/get-started.html),
-[Compose Multiplatform](https://github.com/JetBrains/compose-multiplatform/#compose-multiplatform),
-[Kotlin/Wasm](https://kotl.in/wasm/)…
+## Screenshots
 
-We would appreciate your feedback on Compose/Web and Kotlin/Wasm in the public Slack channel [#compose-web](https://slack-chats.kotlinlang.org/c/compose-web).
-If you face any issues, please report them on [YouTrack](https://youtrack.jetbrains.com/newIssue?project=CMP).
+### Portrait Mobile Screenshots
 
-You can open the web application by running the `:composeApp:wasmJsBrowserDevelopmentRun` Gradle task.
+<div align="center">
+  <img src="screenshots/Pphone1.png" alt="Android Screenshot 1" width="200">
+  <img src="screenshots/Pphone2.png" alt="Android Screenshot 2" width="200">
+  <img src="screenshots/Pphone3.png" alt="Android Screenshot 3" width="200">
+</div>
+
+### Landscape Mobile Screenshots
+
+<div align="center">
+  <img src="screenshots/Lphone1.png" alt="Android Screenshot 1" width="200">
+  <img src="screenshots/Lphone2.png" alt="Android Screenshot 2" width="200">
+  <img src="screenshots/Lphone3.png" alt="Android Screenshot 3" width="200">
+</div>
+
+### Tablet Screenshots
+
+<div align="center">
+  <img src="screenshots/tablet1.png" alt="iOS Screenshot 1" width="200">
+  <img src="screenshots/tablet2.png" alt="iOS Screenshot 2" width="200">
+  <img src="screenshots/tablet3.png" alt="iOS Screenshot 3" width="200">
+</div>
+
+### Milestone #1 Video
