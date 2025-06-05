@@ -140,7 +140,7 @@ class RegisterViewModel(
         val passwordRegex =
             Regex("^(?=.*[0-9])(?=.*[a-zA-Z])(?=.*[!@#\$%^&*()_+\\-=\\[\\]{};':\"\\\\|,.<>\\/?~]).{8,}\$")
         if (password.length < 8) {
-            _state.update { it.copy(passwordError = "Password must be at least 8 characters.") }
+            _state.update { it.copy(passwordError = "Password must be at least 8 characters and include a number or symbol") }
             isValid = false
         } else if (!passwordRegex.matches(password)) {
             _state.update { it.copy(passwordError = "Password needs letters, numbers, and a symbol.") }
