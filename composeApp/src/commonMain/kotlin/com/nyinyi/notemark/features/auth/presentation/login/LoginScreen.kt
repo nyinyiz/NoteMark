@@ -6,6 +6,7 @@ import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.verticalScroll
@@ -30,8 +31,10 @@ import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.window.core.layout.WindowSizeClass
+import com.nyinyi.notemark.core.utils.ScreenConfiguration
 import com.nyinyi.notemark.core.utils.determineScreenConfiguration
 import com.nyinyi.notemark.features.auth.domain.repository.AuthDomainError
+import com.nyinyi.notemark.features.auth.presentation.login.components.LandscapeLoginForm
 import com.nyinyi.notemark.features.auth.presentation.login.components.LoginButton
 import com.nyinyi.notemark.features.auth.presentation.login.components.LoginHeader
 import com.nyinyi.notemark.features.auth.presentation.login.components.LoginNavigationRow
@@ -96,12 +99,53 @@ fun LoginScreen(
                 colors = CardDefaults.cardColors(containerColor = Color.White),
                 elevation = CardDefaults.cardElevation(defaultElevation = 0.dp),
             ) {
-                LoginForm(
-                    state = state,
-                    viewModel = viewModel,
-                    focusManager = focusManager,
-                    onNavigateToRegister = onNavigateToRegister,
-                )
+                when (configuration) {
+                    is ScreenConfiguration.MobilePortrait -> {
+                        LoginForm(
+                            modifier =
+                                Modifier
+                                    .fillMaxSize()
+                                    .padding(24.dp),
+                            state = state,
+                            viewModel = viewModel,
+                            focusManager = focusManager,
+                            onNavigateToRegister = onNavigateToRegister,
+                        )
+                    }
+
+                    is ScreenConfiguration.MobileLandscape -> {
+                        LandscapeLoginForm(
+                            modifier =
+                                Modifier
+                                    .fillMaxSize()
+                                    .padding(24.dp),
+                            state = state,
+                            viewModel = viewModel,
+                            focusManager = focusManager,
+                            onNavigateToRegister = onNavigateToRegister,
+                        )
+                    }
+
+                    is ScreenConfiguration.TabletPortrait -> {
+                        LoginForm(
+                            modifier =
+                                Modifier
+                                    .width(560.dp)
+                                    .padding(top = 56.dp)
+                                    .align(Alignment.CenterHorizontally),
+                            state = state,
+                            viewModel = viewModel,
+                            focusManager = focusManager,
+                            onNavigateToRegister = onNavigateToRegister,
+                        )
+                    }
+
+                    is ScreenConfiguration.TabletLandscape -> {
+                    }
+
+                    ScreenConfiguration.Undefined -> {
+                    }
+                }
             }
         }
     }
@@ -109,6 +153,7 @@ fun LoginScreen(
 
 @Composable
 private fun LoginForm(
+    modifier: Modifier = Modifier,
     state: LoginState,
     viewModel: LoginViewModel,
     focusManager: FocusManager,
@@ -116,9 +161,7 @@ private fun LoginForm(
 ) {
     Column(
         modifier =
-            Modifier
-                .fillMaxSize()
-                .padding(24.dp)
+            modifier
                 .verticalScroll(rememberScrollState()),
         horizontalAlignment = Alignment.Start,
     ) {
